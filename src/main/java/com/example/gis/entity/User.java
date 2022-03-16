@@ -10,19 +10,38 @@ import java.util.Objects;
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
-    private String username;
+    private String username; //用户名
     @Id
     @Column(name = "email", nullable = false)
-    private String email;
+    private String email;    //邮箱
     @Id
     @Column(name = "password", nullable = false)
-    private String password;
+    private String password; //密码
+    private String telephone;
+    private int age;
 
+    public String getTelephone() {
+        return telephone;
+    }
 
-    public User(String username, String email, String password) {
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public User(String username, String email, String password, String telephone, int age) {
         this.email = email;
         this.password = password;
         this.username = username;
+        this.telephone = telephone;
+        this.age = age;
     }
 
     public User() {

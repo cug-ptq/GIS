@@ -20,13 +20,17 @@ $("#signUp-btn").click(function (){
     let signUpUsername = document.getElementById("signUpUsername").value;
     let signUpEmail = document.getElementById("signUpEmail").value;
     let signUpPassword = document.getElementById("signUpPassword").value;
-    console.log("su");
+    let signUpTel = document.getElementById("signUpTel").value;
+    let signUpAge = document.getElementById("signUpAge").value;
     $.ajax({
         type:"post",
         url:"/login/signUp",
         data:{"signUpUsername":signUpUsername,
             "signUpEmail":signUpEmail,
-            "signUpPassword":signUpPassword},
+            "signUpPassword":signUpPassword,
+            "signUpTel":signUpTel,
+            "signUpAge":signUpAge
+        },
         success:function (msg) {
             if(msg.code!=1){
                 $("#msgSignUp").text(msg.map.error);

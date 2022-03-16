@@ -1,279 +1,332 @@
 <!--<!DOCTYPE html>-->
 <!--<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">-->
 <!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Title</title>-->
+<!--    <meta charSet="utf-8"/>-->
+<!--    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>-->
+<!--    <title>Index</title>-->
+
+<!--    <style>-->
+<!--        html,-->
+<!--        body,-->
+<!--        #viewDiv {-->
+<!--            padding: 0;-->
+<!--            margin: 0;-->
+<!--            height: 100%;-->
+<!--            width: 100%;-->
+<!--        }-->
+<!--        #topbar {-->
+<!--            background: #fff;-->
+<!--            position: absolute;-->
+<!--            top: 15px;-->
+<!--            right: 15px;-->
+<!--            padding: 10px;-->
+<!--            align-items: center;-->
+<!--            display: flex;-->
+<!--            flex-flow: row nowrap;-->
+<!--        }-->
+<!--        .action-button {-->
+<!--            margin-right: 5px;-->
+<!--            font-size: 16px;-->
+<!--            background-color: transparent;-->
+<!--            border: 1px solid #d3d3d3;-->
+<!--            color: #6e6e6e;-->
+<!--            height: 32px;-->
+<!--            width: 52px;-->
+<!--            text-align: center;-->
+<!--            box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);-->
+<!--            font-family: Arial;-->
+<!--        }-->
+
+<!--        .action-button:hover,-->
+<!--        .action-button:focus {-->
+<!--            background: #0079c1;-->
+<!--            color: #e4e4e4;-->
+<!--        }-->
+<!--    </style>-->
+
+<!--    <link rel="stylesheet" href="https://js.arcgis.com/4.22/esri/themes/light/main.css"/>-->
+<!--    <script src="https://js.arcgis.com/4.22/"></script>-->
+
+<!--    <script th:inline="javascript">-->
+<!--        // let name = [[${name}]];-->
+<!--        require(["esri/rest/locator", "esri/Map",-->
+<!--            "esri/views/MapView", "esri/widgets/Editor",-->
+<!--            "esri/layers/GraphicsLayer",-->
+<!--            "esri/Graphic",-->
+<!--            "esri/geometry/Point","esri/symbols/PictureMarkerSymbol"],-->
+<!--            (locator, Map,-->
+<!--             MapView, Editor,-->
+<!--             GraphicsLayer, Graphic,-->
+<!--             Point,PictureMarkerSymbol) => {-->
+
+<!--            // Set up a locator url using the world geocoding service-->
+<!--            const locatorUrl = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer";-->
+<!--            const editThisAction = {-->
+<!--                title: "Edit Location",-->
+<!--                id: "edit",-->
+<!--                className: "esri-icon-edit"-->
+<!--            };-->
+<!--            // Create the Map-->
+<!--            const map = new Map({-->
+<!--                basemap: "streets-navigation-vector"-->
+<!--            });-->
+
+<!--            // Create the MapView-->
+<!--            const view = new MapView({-->
+<!--                container: "viewDiv",-->
+<!--                map: map,-->
+<!--                center: [116.026, 28.6826],-->
+<!--                zoom: 12-->
+<!--            });-->
+
+<!--            view.popup.autoOpenEnabled = false;-->
+<!--            view.popup.actions = [editThisAction];-->
+<!--            view.on("click", (event) => {-->
+<!--                const lat = Math.round(event.mapPoint.latitude * 1000) / 1000;-->
+<!--                const lon = Math.round(event.mapPoint.longitude * 1000) / 1000;-->
+<!--                view.popup.open({-->
+<!--                    location: event.mapPoint-->
+<!--                });-->
+
+<!--                const params = {-->
+<!--                    location: event.mapPoint-->
+<!--                };-->
+<!--                locator-->
+<!--                    .locationToAddress(locatorUrl, params)-->
+<!--                    .then((response) => {-->
+<!--                        view.popup.title = response.address;-->
+<!--                        view.popup.content = name;-->
+<!--                    })-->
+<!--                    .catch(() => {-->
+<!--                        view.popup.title = "No address was found for this location";-->
+<!--                    });-->
+<!--            });-->
+<!--            view.when(()=>{-->
+<!--                const editor = new Editor({-->
+<!--                    view: view,-->
+<!--                    container: document.createElement("div"),-->
+<!--                    allowedWorkflows: ["update"],-->
+<!--                    layerInfos: [{-->
+<!--                        formTemplate: { // autocasts to FormTemplate-->
+<!--                            elements: [ // autocasts to FieldElement-->
+<!--                                {-->
+<!--                                    type: "field",-->
+<!--                                    label: "Trail name",-->
+<!--                                    editable: true-->
+<!--                                }]-->
+<!--                        }-->
+<!--                    }]-->
+<!--                });-->
+<!--                view.popup.on("trigger-action", (event) => {-->
+<!--                    if (event.action.id === "edit") {-->
+<!--                        editThis();-->
+<!--                    }-->
+<!--                });-->
+<!--                function editThis(){-->
+<!--                    if (!editor.viewModel.activeWorkFlow) {-->
+<!--                        view.popup.visible = false;-->
+<!--                        // Call the Editor update feature edit workflow-->
+
+<!--                        editor.startUpdateWorkflowAtFeatureEdit(view.popup.selectedFeature);-->
+<!--                        view.ui.add(editor, "top-right");-->
+<!--                        view.popup.spinnerEnabled = false;-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+
+<!--        });-->
+
+<!--    </script>-->
+
+<!--    <script th:src="@{/js/script.js}"></script>-->
+<!--    <script th:src="@{/js/jquery.min.js}"></script>-->
+<!--    <script th:src="@{/js/jsService/login.js}"></script>-->
 <!--</head>-->
+
 <!--<body>-->
-<!--<div>-->
-<!--    <button th:text="${msg}"></button>-->
-<!--    <li>-->
-<!--        <a th:href="@{/login}">登录和注册</a>-->
-<!--    </li>-->
+<!--<div id="viewDiv">-->
+<!--    <div id="topbar">-->
+<!--        <a th:href="@{/login}">-->
+<!--            <button class="action-button" id="pointButtonNumber" type="button" title="Login">-->
+<!--                Login-->
+<!--            </button>-->
+<!--        </a>-->
+<!--    </div>-->
 <!--</div>-->
 <!--</body>-->
 <!--</html>-->
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <title>Popup with edit action | Sample | ArcGIS API for JavaScript 4.22</title>
-
-    <link rel="stylesheet" href="https://js.arcgis.com/4.22/esri/themes/light/main.css" />
-    <script src="https://js.arcgis.com/4.22/"></script>
-
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>地图标注</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.15/esri/css/esri.css">
+    <link rel="shortcut icon" href="/static/img/ico.png"/>
     <style>
-        html,
-        body,
-        #viewDiv {
+        #info {
+            top: 20px;
+            color: #444;
+            height: auto;
+            font-family: arial;
+            right: 20px;
+            margin: 5px;
+            padding: 10px;
+            position: absolute;
+            width: 115px;
+            z-index: 40;
+            border: solid 2px #666;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        html, body, #mapDiv {
             padding: 0;
             margin: 0;
             height: 100%;
-            width: 100%;
         }
 
-        #info {
-            padding: 14px;
-            border-radius: 5px;
-            width: 25%;
+        #titlePane {
+            padding: 0px;
         }
 
+        button {
+            display: block;
+        }
     </style>
+
+    <script src="https://js.arcgis.com/3.15/"></script>
     <script>
+        var map, tb;
+        var baseGraphic;
         require([
-            "esri/Map",
-            "esri/layers/FeatureLayer",
-            "esri/widgets/Editor",
-            "esri/views/MapView",
-            "esri/popup/content/AttachmentsContent",
-            "esri/popup/content/TextContent"
-        ], (Map, FeatureLayer, Editor, MapView, AttachmentsContent, TextContent) => {
-            // Create the Map
-            const map = new Map({
-                basemap: "topo-vector"
+            "esri/map", "esri/toolbars/draw",
+            "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleLineSymbol",
+            "esri/symbols/PictureFillSymbol", "esri/symbols/CartographicLineSymbol",
+            "esri/graphic",
+            "esri/Color", "dojo/dom", "dojo/on", "dojo/domReady!"
+        ], function (
+            Map, Draw,
+            SimpleMarkerSymbol, SimpleLineSymbol,
+            PictureFillSymbol, CartographicLineSymbol,
+            Graphic,
+            Color, dom, on
+        ) {
+            map = new Map("mapDiv", {
+                center: [114.309, 30.578],
+                zoom: 12
             });
-            let editor, features;
-            /*************************************************************
-             * The PopupTemplate content is the text that appears inside the
-             * popup. Bracketed {fieldName} can be used to reference the value
-             * of an attribute of the selected feature. HTML elements can be
-             * used to provide structure and styles within the content.
-             **************************************************************/
-            const editThisAction = {
-                title: "Edit feature",
-                id: "edit-this",
-                className: "esri-icon-edit"
-            };
+            map.on("load", initToolbar);
+            var myTiledMapServiceLayer = new esri.layers.ArcGISTiledMapServiceLayer("http://map.geoq.cn/arcgis/rest/services/ChinaOnlineStreetWarm/MapServer");
+            map.addLayer(myTiledMapServiceLayer); //添加到地图中
+            // 点
+            var markerSymbol = new SimpleMarkerSymbol();
+            markerSymbol.setPath("M16,4.938c-7.732,0-14,4.701-14,10.5c0,1.981,0.741,3.833,2.016,5.414L2,25.272l5.613-1.44c2.339,1.316,5.237,2.106,8.387,2.106c7.732,0,14-4.701,14-10.5S23.732,4.938,16,4.938zM16.868,21.375h-1.969v-1.889h1.969V21.375zM16.772,18.094h-1.777l-0.176-8.083h2.113L16.772,18.094z");
+            markerSymbol.setColor(new Color("#00FFFF"));
 
-            // Create a popupTemplate for the featurelayer and pass in a function to set its content and specify an action to handle editing the selected feature
-            const template = {
-                title: nameEdit,
-                content: difficultyLevel,
-                fieldInfos: [{
-                    fieldName: "trailName"
-                }, {
-                    fieldName: "difficulty"
-                }],
-                actions: [editThisAction]
-            };
-            //name
-            function nameEdit(feature){
-                let name = "LocationName: " + feature.graphic.attributes.trailName;
-                return name;
-            }
-            // Function that creates two popup elements for the template: attachments and text
-            function difficultyLevel(feature) {
+            function initToolbar() {
+                tb = new Draw(map);
+                tb.on("draw-end", addGraphic);
+                //绘制点事件
+                document.getElementById("Point").onclick = function (evt) {
+                    var tool = evt.target.id.toLowerCase();
+                    map.disableMapNavigation();
+                    tb.activate(tool);
+                }
 
-                // 1. Set how the attachments should display within the popup
-                const attachmentsElement = new AttachmentsContent({
-                    displayType: "list"
-                });
-
-                const textElement = new TextContent();
-
-                const level = feature.graphic.attributes.difficulty;
-                const green = "<b><span style='color:green'>" + level + "</span></b>.";
-                const purple = "<b><span style='color:purple'>" + level + "</span></b>.";
-                const red = "<b><span style='color:red'>" + level + "</span></b>.";
-
-                // If the feature's "difficulty" attribute is a specific value, set it a certain color
-                // "easy" = green
-                // "medium" = purple
-                // "hard" = red
-                switch (level) {
-                    case "easy":
-                        textElement.text = "The {trailName} trail has a difficulty level of " + green
-                        return (
-                            [textElement, attachmentsElement]
-                        );
-                        break;
-                    case "medium":
-                        textElement.text = "The {trailName} trail has a difficulty level of " + purple
-                        return (
-                            [textElement, attachmentsElement]
-                        );
-                        break;
-                    case "hard":
-                        textElement.text = "The {trailName} trail has a difficulty level of " + red
-                        return (
-                            [textElement, attachmentsElement]
-                        )
+                //清除事件
+                document.getElementById("clear").onclick = function (evt) {
+                    map.graphics.clear();
                 }
             }
 
-            const featureLayer = new FeatureLayer({
-                url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/El_Paso_Recreation_AttributeEditsOnly/FeatureServer/1",
-                outFields: ["*"],
-                popupTemplate: template
-            });
-            map.add(featureLayer);
+            function addGraphic(evt) {
+                //deactivate the toolbar and clear existing graphics
+                tb.deactivate();
+                map.enableMapNavigation();
 
-            // Create the MapView
-            const view = new MapView({
-                container: "viewDiv",
-                map: map,
-                zoom: 15,
-                center: [-106.48871516310629, 31.7980770813721]
-            });
-
-            view.when(() => {
-                // Create the Editor with the specified layer and a list of field configurations
-                editor = new Editor({
-                    view: view,
-                    container: document.createElement("div"),
-                    layerInfos: [{
-                        layer: featureLayer,
-                        formTemplate: { // autocasts to FormTemplate
-                            elements: [ // autocasts to FieldElement
-                                {
-                                    type: "field",
-                                    fieldName: "trailName",
-                                    label: "Trail name",
-                                    editable: true
-                                },
-                                {
-                                    type: "field",
-                                    fieldName: "condition",
-                                    label: "Condition",
-                                    hint: "The overall condition for running/biking?"
-                                },
-                                {
-                                    type: "field",
-                                    fieldName: "difficulty",
-                                    label: "Difficulty",
-                                    hint: "How difficult was this trail to run/bike?"
-                                },
-                                {
-                                    type: "field",
-                                    fieldName: "trckType",
-                                    label: "Track type",
-                                    hint: "Running or biking?"
-                                },
-                                {
-                                    type: "field",
-                                    fieldName: "notes",
-                                    label: "Additional comments"
-                                }]
-                        }
-                    }]
-                });
-
-                // Execute each time the "Edit feature" action is clicked
-                function editThis() {
-                    // If the EditorViewModel's activeWorkflow is null, make the popup not visible
-                    if (!editor.viewModel.activeWorkFlow) {
-                        view.popup.visible = false;
-                        // Call the Editor update feature edit workflow
-
-                        editor.startUpdateWorkflowAtFeatureEdit(view.popup.selectedFeature);
-                        view.ui.add(editor, "top-right");
-                        view.popup.spinnerEnabled = false;
-                    }
-
-                    // We need to set a timeout to ensure the editor widget is fully rendered. We
-                    // then grab it from the DOM stack
-                    setTimeout(() => {
-                        // Use the editor's back button as a way to cancel out of editing
-                        let arrComp = editor.domNode.getElementsByClassName(
-                            "esri-editor__back-button esri-interactive");
-                        if (arrComp.length === 1) {
-                            // Add a tooltip for the back button
-                            arrComp[0].setAttribute("title", "Cancel edits, return to popup");
-                            // Add a listener to listen for when the editor's back button is clicked
-                            arrComp[0].addEventListener('click', (evt) => {
-                                // Prevent the default behavior for the back button and instead remove the editor and reopen the popup
-                                evt.preventDefault();
-                                view.ui.remove(editor);
-                                view.popup.open({
-                                    features: features
-                                });
-                            });
-                        }
-                    }, 150);
+                // figure out which symbol to use
+                var symbol;
+                if (evt.geometry.type === "point" || evt.geometry.type === "multipoint") {
+                    symbol = markerSymbol;
                 }
-
-                // Event handler that fires each time an action is clicked
-                view.popup.on("trigger-action", (event) => {
-                    if (event.action.id === "edit-this") {
-                        editThis();
-                    }
-                });
-
-            });
-
-            // Watch when the popup is visible
-            view.popup.watch("visible", (event) => {
-                // Check the Editor's viewModel state, if it is currently open and editing existing features, disable popups
-                if (editor.viewModel.state === "editing-existing-feature") {
-                    view.popup.close();
-                } else {
-                    // Grab the features of the popup
-                    features = view.popup.features;
+                console.log("evt.attr-->",evt.attributes);//undefined
+                var aa = new esri.Graphic(evt.geometry, symbol, evt.attributes);
+                console.log("aa.attr-->",aa.attributes);//undefined
+                if (aa.attributes) {//(undefined)false
+                    aa.attributes = {"info_content": evt.attributes["info_content"]};
                 }
-            });
-
-            featureLayer.on("apply-edits", () => {
-                // Once edits are applied to the layer, remove the Editor from the UI
-                view.ui.remove(editor);
-
-                // Iterate through the features
-                features.forEach((feature) => {
-                    // Reset the template for the feature if it was edited
-                    feature.popupTemplate = template;
+                var htmlstr = getQueryWinContent(aa.attributes);
+                //初始化属性
+                var attr = {"content": htmlstr, "info_content": "我是保存的内容"};
+                baseGraphic = new esri.Graphic(evt.geometry, symbol, attr);
+                map.graphics.add(baseGraphic);//添加了graphic
+                console.log("baseGraphic-->",baseGraphic);
+                console.log(baseGraphic.geometry.x);//坐标
+                console.log(baseGraphic.geometry.y);//坐标 你可以浏览器打开后，右键检查，控制台会输出的
+                setTimeout(function () {
+                    showQueryGraphicWin(baseGraphic);
+                }, 100);
+                //点击地图上的graphic，显示infowindow
+                //这个事件不能放在外面，报错map.graphics is null
+                map.graphics.on("click", function (event) {
+                    console.log("graphics.click-->",event);
+                    var htmlstr = getQueryWinContent(event.graphic.attributes);
+                    event.graphic.attributes["content"]=htmlstr;
+                    showQueryGraphicWin(event.graphic);
                 });
+            }
+            function showQueryGraphicWin(graphic) {
+                var pt = graphic.geometry;
+                //map.centerAt(pt);
+                map.infoWindow.resize(320, 650);
+                map.infoWindow.setTitle("<div style='background-color: #444444;height: 30px;color: #fff;line-height: 30px;padding-left: 20px;border-bottom: #2b373d 1px solid'>我是标注</div>");
+                map.infoWindow.setContent(graphic.attributes.content);//getQueryWinContent函数前面那串html
+                setTimeout(function () {
+                    map.infoWindow.show(pt);
+                }, 100);
+            }
 
-                // Open the popup again and reset its content after updates were made on the feature
-                if (features) {
-                    view.popup.open({
-                        features: features
-                    });
+            //aa.attributes
+            function getQueryWinContent(attr) {
+                let content = "请输入保存内容";
+                if (attr) {//第一次是false，当保存之后，回来查询就有值了
+                    content = attr["info_content"];
+                    console.log("content-->",content);
                 }
-
-                // Cancel the workflow so that once edits are applied, a new popup can be displayed
-                editor.viewModel.cancelWorkflow();
-
-            });
-
-            view.ui.add("info", {
-                position: "top-left",
-                index: 1
-            });
+                var html = "";
+                html = "<div class='inforwin_Container' style='width:300px;border: 0px solid #ABADCE;' id='inforwin_Container'>" +
+                    "<div class='resource_tit' style='margin: 0;'>" +
+                    "<table>";
+                html += "<tr>" +
+                    "<td><label>我是内容</label></td>" +
+                    "<td><input id='info_content' type='text' value='" + content + "' style='height:22px;width:200px;margin:1px;'/></td>" +
+                    "</tr>";
+                html += "</table>" +
+                    "</div>";
+                html += "<div><button type='button' onclick=save()>保存</button></div>";
+                html += "</div>";
+                return html;
+            }
         });
-
+        //注意这个函数一定要放在require外面，如果放在里面，会报错，save未定义，这是因为这个函数如果放在里面，当页面加载出来的HTML元素时，save被封在了require里面，外面就访问不到。因此要把baseGraphic定义成全局变量。
+        function save() {
+            var info_content = document.getElementById("info_content").value;
+            baseGraphic.attributes["info_content"] = info_content;//将infowindow新的内容替换掉
+            alert("保存成功" + info_content);
+        }
     </script>
-
 </head>
 
-<body>
-<div id="viewDiv"></div>
-<div id="info" class="esri-widget">
-    <h3>Select a feature to display its popup</h3>
-    <h4>
-        Edit the feature by clicking on the "Edit feature" action within the popup.
-    </h4>
-</div>
-</body>
 
+<body>
+
+<div id="info">
+    <button id="Point">Point</button>
+
+    <button id="clear">清除</button>
+</div>
+
+<div id="mapDiv"></div>
+</body>
 </html>
